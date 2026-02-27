@@ -16,7 +16,7 @@ public class StudentDAO extends DAO {
 		Connection con = getConnection();
 		
 		PreparedStatement st = con.prepareStatement(
-				"select * from student");
+				"select * from student order by student_id");
 		ResultSet rs = st.executeQuery();
 		
 		while (rs.next()) {
@@ -54,6 +54,45 @@ public class StudentDAO extends DAO {
 		con.close();
 		
 		return s;
+	}
+
+	public List<Student> selectByStudentName(String keyword) throws Exception {
+		List<Student> list = new ArrayList<Student>();
+
+		Connection con = getConnection();
+
+		PreparedStatement st = con.prepareStatement(
+				"select * from student where student_name like ? order by student_id");
+		st.setString(1, "%" + keyword + "%");
+		ResultSet rs = st.executeQuery();
+
+		while (rs.next()) {
+			Student s = new Student();
+			s.setStudentId(rs.getInt("student_id"));
+			s.setStudentName(rs.getString("student_name"));
+			s.setCourseId(rs.getInt("course_id"));
+			list.add(s);
+		}
+
+		st.close();
+		con.close();
+
+		return list;
+	}
+
+	public Student insert(Student student) throws Exception {
+		Connection con = getConnection();
+		PreparedStatement st = con.prepareStatement(
+				"insert into student(student_id, student_name, course_id) values(?, ?, ?)");
+		st.setInt(1, student.getStudentId());
+		st.setString(2, student.getStudentName());
+		st.setInt(3, student.getCourseId());
+		st.executeUpdate();
+
+		st.close();
+		con.close();
+
+		return student;
 	}
 
 }
