@@ -5,7 +5,7 @@
 
 <h1>学生登録</h1>
 <p>追加する学生の情報を入力してください。</p>
-<form action="ok" method="get">
+<form action="done" method="get">
 	<p>
 		<label>学生番号：</label>
 		<input type="number" name="studentId" required>
